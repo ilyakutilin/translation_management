@@ -220,6 +220,12 @@ class Document(models.Model):
         choices=choices.FILE_TYPES,
         help_text='Document File Type'
     )
+    number_of_pages = models.SmallIntegerField(
+        'Number of Pages',
+        default=1,
+        help_text=('Number of physical pages subject to translation '
+                   'in a given document (file)')
+    )
     company = models.CharField(  # TODO: create model & change to ForeignKey
         'Company',
         max_length=100,

@@ -61,6 +61,7 @@ class DocumentAdmin(admin.ModelAdmin):
         'revision',
         'file_name',
         'file_type',
+        'number_of_pages',
         'company',
     )
     search_fields = ('number', 'source_title', 'translated_title', 'file_name')
