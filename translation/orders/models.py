@@ -158,8 +158,7 @@ class Activity(models.Model):
         null=True,
         help_text='Actual duration of the activity.'
     )
-    # TODO: Re-write this to Foreign Key when the model is created.
-    outsource = models.BooleanField(
+    outsource = models.BooleanField(  # TODO: create model & change to FKey
         blank=True,
         null=True
     )
@@ -169,6 +168,69 @@ class Activity(models.Model):
         verbose_name_plural = 'Activities'
 
     def __str__(self):
-        return (f'{self.get_activity_type_display()} '
-                f'of {self.translation_request.email_subject[:15]} '
-                f'requested by {self.translation_request.requester.name}')
+        return self.get_activity_type_display()
+
+
+class Document(models.Model):
+    """Model for Documents."""
+    number = models.CharField(
+        'Number',
+        max_length=50,
+        blank=True,
+        help_text='Document Number. Leave blank if cannot be determined.'
+    )
+    source_language = models.CharField(
+        'Source Language',
+        max_length=2,
+        choices=choices.LANGUAGES,
+        help_text='Source language of the document'
+    )
+    translated_language = models.CharField(
+        'Translated Language',
+        max_length=2,
+        choices=choices.LANGUAGES,
+        help_text='Language of the document after translation'
+    )
+    source_title = models.CharField(
+        'Source Title',
+        max_length=200,
+        blank=True,
+        help_text='Title of the document in the source language'
+    )
+    translated_title = models.CharField(
+        'Translated Title',
+        max_length=200,
+        blank=True,
+        help_text='Title of the document after translation'
+    )
+    revision = models.SmallIntegerField(
+        'Rev No.',
+        blank=True,
+        null=True,
+        help_text='Document Revision No. '
+    )
+    file_name = models.CharField(
+        'File Name',
+        max_length=260,
+        help_text='Document File Name'
+    )
+    file_type = models.CharField(
+        'File Type',
+        max_length=3,
+        choices=choices.FILE_TYPES,
+        help_text='Document File Type'
+    )
+    company = models.CharField(  # TODO: create model & change to ForeignKey
+        'Company',
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text='Company that this document is related to'
+    )
+
+    class Meta:
+        verbose_name = 'Document'
+        verbose_name_plural = 'Documents'
+
+    def __str__(self):
+        return self.file_name

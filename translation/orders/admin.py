@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Activity, Requester, TranslationRequest
+from .models import Activity, Document, Requester, TranslationRequest
 
 
 @admin.register(Requester)
@@ -46,4 +46,24 @@ class ActivityAdmin(admin.ModelAdmin):
         'actual_duration',
         'outsource',
     )
+    empty_value_display = '-empty-'
+
+
+@admin.register(Document)
+class DocumentAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk',
+        'number',
+        'source_language',
+        'translated_language',
+        'source_title',
+        'translated_title',
+        'revision',
+        'file_name',
+        'file_type',
+        'company',
+    )
+    search_fields = ('number', 'source_title', 'translated_title', 'file_name')
+    list_filter = ('source_language', 'translated_language',
+                   'file_type', 'company')
     empty_value_display = '-empty-'
