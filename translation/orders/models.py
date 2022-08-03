@@ -73,7 +73,12 @@ class TranslationRequest(models.Model):
                    'determined by the request. False if the Requested Date '
                    'and Time are set internally.')
     )
-    # TODO: Add 'comments' field
+    comments = models.CharField(
+        'Comments',
+        max_length=100,
+        blank=True,
+        help_text='Comments to the Request'
+    )
     current_stage = models.ForeignKey(
         Requester,
         blank=True,
@@ -88,8 +93,21 @@ class TranslationRequest(models.Model):
         null=True,
         help_text='Date of submission. Not submitted yet if not indicated.'
     )
-    # TODO: Add 'submitter' field
-    # TODO: Add 'status' field
+    submitter = models.ForeignKey(
+        User,
+        on_delete=models.RESTRICT,
+        related_name='requests',
+        verbose_name='Submitter',
+        help_text='Registered user who submitted the request to the requester'
+    )
+    status = models.CharField(
+        'Status',
+        max_length=3,
+        choices=choices.STATUS_CHOICES,
+        default='PND',
+        help_text=('Translation Request status,'
+                   'selected from the list of the predefined ones')
+    )
 
     class Meta:
         verbose_name = 'Translation Request'
@@ -139,7 +157,10 @@ class Activity(models.Model):
         help_text='Actual duration of the activity.'
     )
     # TODO: Re-write this to Foreign Key when the model is created.
-    outsource = models.BooleanField()
+    outsource = models.BooleanField(
+        blank=True,
+        null=True
+    )
 
     class Meta:
         verbose_name = 'Activity'
