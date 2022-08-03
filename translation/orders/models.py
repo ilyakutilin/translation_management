@@ -80,7 +80,7 @@ class TranslationRequest(models.Model):
         help_text='Comments to the Request'
     )
     current_stage = models.ForeignKey(
-        Requester,
+        'Activity',
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
@@ -97,6 +97,8 @@ class TranslationRequest(models.Model):
         User,
         on_delete=models.RESTRICT,
         related_name='requests',
+        blank=True,
+        null=True,
         verbose_name='Submitter',
         help_text='Registered user who submitted the request to the requester'
     )
