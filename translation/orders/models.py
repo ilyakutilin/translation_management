@@ -133,13 +133,14 @@ class Activity(models.Model):
         verbose_name='Translation Request',
         help_text='Translation Request which this Activity is related to'
     )
-    activity_type = models.CharField(
-        'Activity Type',
+    type = models.CharField(
+        'Type',
         max_length=3,
         choices=choices.ACTIVITY_CHOICES,
+        default='PRP',
         help_text='Type of the activity from the list of pre-selected ones'
     )
-    responsible = models.ForeignKey(
+    responsible = models.ForeignKey(  # TODO: deal with potential multiple
         User,
         on_delete=models.RESTRICT,
         related_name='activities',
@@ -158,9 +159,15 @@ class Activity(models.Model):
         null=True,
         help_text='Actual duration of the activity.'
     )
-    outsource = models.BooleanField(  # TODO: create model & change to FKey
+    outsource = models.OneToOneField(
+        'Outsource',
+        on_delete=models.CASCADE,
+        related_name='original_activity',
         blank=True,
-        null=True
+        null=True,
+        verbose_name='Outsource',
+        help_text=('This activity will be outsourced. '
+                   'A corresponding Outsource shall be created.')
     )
 
     class Meta:
@@ -168,7 +175,76 @@ class Activity(models.Model):
         verbose_name_plural = 'Activities'
 
     def __str__(self):
-        return self.get_activity_type_display()
+        return self.get_type_display()
+
+
+class Outsource(models.Model):
+    agency = models.CharField(
+        'Agency',
+        max_length=10,
+        choices=choices.AGENCY_CHOICES,
+        default='MTA',
+        help_text='Translation agency in charge of this outsourced activity'
+    )
+    activity = models.OneToOneField(
+        Activity,
+        on_delete=models.CASCADE,
+        related_name='outsourced',
+        verbose_name='Activity',
+        help_text='Activity that this Outsource is related to'
+    )
+    status = models.CharField(
+        'Status',
+        max_length=10,
+        choices=choices.AGENCY_STATUS_CHOICES,
+        default='REQ',
+        help_text='Agency activity status'
+    )
+    deadline = models.DateTimeField(
+        'Deadline',
+        help_text='Deadline when the agency shall provide the result'
+    )
+    standard_pages = models.DecimalField(
+        'Standard Pages',
+        max_digits=5,
+        decimal_places=2,
+        default=0.00,
+        help_text='Amount of standard pages (or "translation pages")'
+    )
+    dtp_cat_1 = models.PositiveSmallIntegerField(
+        'DTP Cat 1',
+        default=0,
+        help_text='Amount of DTP objects of Category 1'
+    )
+    dtp_cat_2 = models.PositiveSmallIntegerField(
+        'DTP Cat 2',
+        default=0,
+        help_text='Amount of DTP objects of Category 2'
+    )
+    dtp_cat_3 = models.PositiveSmallIntegerField(
+        'DTP Cat 3',
+        default=0,
+        help_text='Amount of DTP objects of Category 3'
+    )
+    dtp_cat_4 = models.PositiveSmallIntegerField(
+        'DTP Cat 4',
+        default=0,
+        help_text='Amount of DTP objects of Category 4'
+    )
+    cost = models.DecimalField(
+        'Cost',
+        max_digits=10,
+        decimal_places=2,
+        default=0.00,
+        help_text='Cost of the outsourced activity in rubles'
+    )
+
+    class Meta:
+        verbose_name = 'Outsourced Activity'
+        verbose_name_plural = 'Outsourced Activities'
+
+    def __str__(self):
+        return f'{self.activity} by {self.get_agency_display()}'
 
 
 class Document(models.Model):
@@ -203,7 +279,7 @@ class Document(models.Model):
         blank=True,
         help_text='Title of the document after translation'
     )
-    revision = models.SmallIntegerField(
+    revision = models.PositiveSmallIntegerField(
         'Rev No.',
         blank=True,
         null=True,
@@ -220,7 +296,7 @@ class Document(models.Model):
         choices=choices.FILE_TYPES,
         help_text='Document File Type'
     )
-    number_of_pages = models.SmallIntegerField(
+    number_of_pages = models.PositiveSmallIntegerField(
         'Number of Pages',
         default=1,
         help_text=('Number of physical pages subject to translation '

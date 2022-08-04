@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Activity, Document, Requester, TranslationRequest
+from .models import (Activity, Document, Outsource, Requester,
+                     TranslationRequest)
 
 
 @admin.register(Requester)
@@ -40,12 +41,31 @@ class ActivityAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'translation_request',
-        'activity_type',
+        'type',
         'responsible',
         'expected_duration',
         'actual_duration',
         'outsource',
     )
+    empty_value_display = '-empty-'
+
+
+@admin.register(Outsource)
+class OutsourceAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk',
+        'agency',
+        'activity',
+        'status',
+        'deadline',
+        'standard_pages',
+        'dtp_cat_1',
+        'dtp_cat_2',
+        'dtp_cat_3',
+        'dtp_cat_4',
+        'cost',
+    )
+    list_filter = ('agency', 'deadline',)
     empty_value_display = '-empty-'
 
 

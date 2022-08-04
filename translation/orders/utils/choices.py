@@ -33,3 +33,13 @@ FILE_TYPES = [
     ('MSG', 'Outlook Email message'),
     ('PIC', 'Picture'),
 ]
+
+AGENCY_CHOICES = [
+    ('MTA', 'MTA'),
+]
+
+AGENCY_STATUS_CHOICES = [
+    ('REQ', 'Required'),
+    ('ONG', 'Ongoing'),
+    ('DNE', 'Done'),
+]
