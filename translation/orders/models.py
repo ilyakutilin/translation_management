@@ -35,6 +35,31 @@ class Requester(models.Model):
         return self.name
 
 
+class Company(models.Model):
+    """Model for the companies related to documents"""
+    name = models.CharField(
+        'Name',
+        max_length=30,
+        help_text=('Company Name. Please input using the Latin alphabet, '
+                   'in uppercase, without the type of legal entity '
+                   '(i.e. no "LLC" and the like.')
+    )
+    code = models.CharField(
+        'Code',
+        max_length=50,
+        unique=True,
+        help_text=('INN for the Russian entities or any kind of Tax Code '
+                   'or ID for foreign entities. Required field.')
+    )
+
+    class Meta:
+        verbose_name = 'Company'
+        verbose_name_plural = 'Companies'
+
+    def __str__(self):
+        return self.name
+
+
 class TranslationRequest(models.Model):
     """Model for a translation request."""
     requester = models.ForeignKey(
@@ -302,11 +327,12 @@ class Document(models.Model):
         help_text=('Number of physical pages subject to translation '
                    'in a given document (file)')
     )
-    company = models.CharField(  # TODO: create model & change to ForeignKey
-        'Company',
-        max_length=100,
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
+        verbose_name='Company',
         help_text='Company that this document is related to'
     )
 

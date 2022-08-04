@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import (Activity, Document, Outsource, Requester,
+from .models import (Activity, Company, Document, Outsource, Requester,
                      TranslationRequest)
 
 
@@ -12,6 +12,17 @@ class RequesterAdmin(admin.ModelAdmin):
         'email',
     )
     search_fields = ('name',)
+    empty_value_display = '-empty-'
+
+
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk',
+        'name',
+        'code',
+    )
+    search_fields = ('name', 'code',)
     empty_value_display = '-empty-'
 
 
