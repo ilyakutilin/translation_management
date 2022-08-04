@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from orders.models import Requester
+from rest_framework import viewsets
 
-# Create your views here.
+from .serializers import RequesterSerializer
+
+
+class RequesterViewSet(viewsets.ModelViewSet):
+    """CRUD for Requesters of translation."""
+    queryset = Requester.objects.all()
+    serializer_class = RequesterSerializer
