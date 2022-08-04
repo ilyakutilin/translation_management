@@ -1,6 +1,8 @@
-from orders.models import Requester
+from orders.models import Company, Requester
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+
+from .utils import utils
 
 
 class RequesterSerializer(serializers.ModelSerializer):
@@ -17,3 +19,20 @@ class RequesterSerializer(serializers.ModelSerializer):
                 fields=['name', 'email']
             )
         ]
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    """Serializer for Companies."""
+
+    class Meta:
+        fields = '__all__'
+        model = Company
+
+    def validate_name(self, value):
+        """Check if the company name meets the naming requirements."""
+        if not utils.company_name_is_correct(value):
+            raise serializers.ValidationError(
+                'For company name please use Latin alphabet, in upper case, '
+                'without the type of legal entity (i.e. no "LLC" and the like)'
+            )
+        return value

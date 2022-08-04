@@ -2,9 +2,7 @@ from rest_framework import permissions
 
 
 class IsAuthenticatedOrStaff(permissions.BasePermission):
-    """
-    Кастомное разрешение: только авторы объекта могут его редактировать.
-    """
+    """Custom permission: authenticated users can view, staff can edit."""
 
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
