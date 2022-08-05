@@ -1,8 +1,8 @@
-from orders.models import Company, Requester, TranslationRequest
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from .utils import utils
+from core.utils import utils
+from orders.models import Company, Requester, TranslationRequest
 
 
 class RequesterSerializer(serializers.ModelSerializer):
@@ -42,5 +42,7 @@ class TranslationRequestSerializer(serializers.ModelSerializer):
     """Serializer for Translation Requests."""
 
     class Meta:
-        fields = '__all__'
+        fields = ('requester', 'received', 'email_subject', 'tn_no',
+                  'requested_date', 'strict_deadline', 'comments',
+                  'current_stage', 'submitted', 'submitter', 'status',)
         model = TranslationRequest
