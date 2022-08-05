@@ -1,4 +1,4 @@
-from orders.models import Company, Requester
+from orders.models import Company, Requester, TranslationRequest
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
@@ -36,3 +36,11 @@ class CompanySerializer(serializers.ModelSerializer):
                 'without the type of legal entity (i.e. no "LLC" and the like)'
             )
         return value
+
+
+class TranslationRequestSerializer(serializers.ModelSerializer):
+    """Serializer for Translation Requests."""
+
+    class Meta:
+        fields = '__all__'
+        model = TranslationRequest
