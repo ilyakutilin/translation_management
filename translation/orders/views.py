@@ -1,6 +1,6 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
-from . import forms
+from . import forms, models
 
 
 def index(request):
@@ -10,7 +10,19 @@ def index(request):
 def add_requester(request):
     form = forms.RequesterForm(request.POST or None)
     if form.is_valid():
-        requester = form.save()
-        requester.save()
+        form.save()
+        # TODO: Proper redirect required
         return redirect("orders:index")
     return render(request, "orders/add_requester.html", {"form": form})
+
+
+def edit_requester(request, requester_id):
+    requester = get_object_or_404(models.Requester, pk=requester_id)
+    form = forms.RequesterForm(request.POST or None, instance=requester)
+    if form.is_valid():
+        form.save()
+        # TODO: Proper redirect required
+        return redirect("orders:index")
+
+    context = {"is_edit": True, "form": form, "requester": requester}
+    return render(request, "posts/create_post.html", context)

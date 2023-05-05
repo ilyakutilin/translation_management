@@ -9,4 +9,9 @@ urlpatterns = [
     path("", views.index, name="index"),
     # Add a requester
     path("requesters/add/", views.add_requester, name="add_requester"),
+    path(
+        "requesters/<int:requester_id>/edit",
+        views.edit_requester,
+        name="edit_requester",
+    ),
 ]
