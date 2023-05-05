@@ -1,14 +1,24 @@
 {% extends "base.html" %}
 {% load user_filters %}
 
-{% block title %}Add a new Requester{% endblock %}
+{% block title %}
+  {% if is_edit %}
+    Add a new Requester
+  {% else %}
+    Edit the Requester
+  {% endif %}
+{% endblock %}
 
 {% block content %}
   <div class="row justify-content-center">
     <div class="col-md-8 p-5">
       <div class="card">
         <div class="card-header">
-          Add a new Requester
+          {% if is_edit %}
+            Edit the Requester
+          {% else %}
+            Add a new Requester
+          {% endif %}
         </div>
         <div class="card-body">
           {% if form.errors %}
@@ -26,9 +36,14 @@
             {% endfor %}
           {% endif %}
 
+          {% if is_edit %}
+            <form method="post" enctype="multipart/form-data" action="{% url 'orders:edit_requester' requester.pk %}">
+          {% else %}
             <form method="post" enctype="multipart/form-data" action="{% url 'orders:add_requester' %}">
-            {% csrf_token %}
-            {% for field in form %}
+          {% endif %}
+
+          {% csrf_token %}
+          {% for field in form %}
             <div class="form-group row my-3 p-3">
               <label for="{{ field.id_for_label }}">
                 {{ field.label }}
@@ -42,11 +57,15 @@
                   {{ field.help_text|safe }}
                 </small>
               {% endif %}
-            {% endfor %}
-            </div>            
+            </div>
+          {% endfor %}          
             <div class="d-flex justify-content-end">
               <button type="submit" class="btn btn-primary">
-                Add
+                {% if is_edit %}
+                  Save
+                {% else %}
+                  Add
+                {% endif %}
               </button>
             </div>
           </form>
