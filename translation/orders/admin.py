@@ -8,7 +8,9 @@ from .models import (Activity, Company, Document, Outsource, Requester,
 class RequesterAdmin(admin.ModelAdmin):
     list_display = (
         'pk',
-        'name',
+        'first_name',
+        'middle_name',
+        'last_name',
         'email',
     )
     search_fields = ('name',)
