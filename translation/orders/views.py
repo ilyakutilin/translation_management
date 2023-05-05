@@ -25,4 +25,4 @@ def edit_requester(request, requester_id):
         return redirect("orders:index")
 
     context = {"is_edit": True, "form": form, "requester": requester}
-    return render(request, "posts/create_post.html", context)
+    return render(request, "orders/add_requester.html", context)
