@@ -3,9 +3,9 @@
 
 {% block title %}
   {% if is_edit %}
-    Add a new Requester
-  {% else %}
     Edit the Requester
+  {% else %}
+    Add a new Requester
   {% endif %}
 {% endblock %}
 
@@ -51,7 +51,11 @@
                   <span class="required text-danger" >*</span>
                 {% endif %}
               </label>
-              {{ field|addclass:'form-control' }}
+              {% if field|is_checkbox %}
+                {{ field|addclass:'form-check form-switch' }}
+              {% else %}
+                {{ field|addclass:'form-control' }}
+              {% endif %}
               {% if field.help_text %}
                 <small id="{{ field.id_for_label}}-help" class="form-text text-muted">
                   {{ field.help_text|safe }}

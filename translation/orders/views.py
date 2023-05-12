@@ -11,7 +11,7 @@ def index(request):
 
 
 def add_requester(request):
-    form = forms.RequesterForm(request.POST or None)
+    form = forms.RequesterAddForm(request.POST or None)
     if form.is_valid():
         form.save()
         # TODO: Proper redirect required
@@ -21,7 +21,7 @@ def add_requester(request):
 
 def edit_requester(request, requester_id):
     requester = get_object_or_404(models.Requester, pk=requester_id)
-    form = forms.RequesterForm(request.POST or None, instance=requester)
+    form = forms.RequesterEditForm(request.POST or None, instance=requester)
     if form.is_valid():
         form.save()
         # TODO: Proper redirect required
