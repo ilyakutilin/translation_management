@@ -4,12 +4,23 @@
 
 {% block content %}
   <h1>{% block h1 %}List of Requesters{% endblock %}</h1>
-  {% for requester in page_obj %}
-    <div class="row mb-3 text-center">
-      <div class="col-md-8 themed-grid-col">{{ requester }}</div>
-      <div class="col-md-4 themed-grid-col">{{ requester.email }}</div>
-    </div>
-    {% if not forloop.last %}<hr>{% endif %}
-  {% endfor %}
+  <table class="table table-bordered border-primary-subtle">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for requester in page_obj %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><a href="{% url 'orders:edit_requester' requester.pk %}">{{ requester }}</a></td>
+        <td>{{ requester.email }}</td>
+      {% endfor %}
+      </tr>
+    </tbody>
+  </table>
   {% include 'includes/paginator.html' %}
 {% endblock %}
