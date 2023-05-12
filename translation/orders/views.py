@@ -7,7 +7,8 @@ REQUESTER_LIST_LIMIT = 50
 
 
 def index(request):
-    return render(request, "orders/index.html")
+    requesters = models.Requester.objects.all()
+    return render(request, "orders/index.html", {"requesters": requesters})
 
 
 def add_requester(request):
