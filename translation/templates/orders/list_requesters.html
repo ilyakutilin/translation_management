@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}List of Requesters{% endblock %}
+
+{% block content %}
+  <h1>{% block h1 %}List of Requesters{% endblock %}</h1>
+  <table class="table table-bordered border-primary-subtle">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for requester in page_obj %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><a href="{% url 'orders:edit_requester' requester.pk %}">{{ requester }}</a></td>
+        <td>{{ requester.email }}</td>
+      {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+  {% include 'includes/paginator.html' %}
+{% endblock %}

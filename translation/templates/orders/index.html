@@ -3,7 +3,24 @@
 {% block title %}Main page{% endblock %}
 
 {% block content %}
-<div class="col-lg-6 mx-auto">
-  <p class="lead mb-4">There is nothing here at the moment.</p>
+<div class="container">
+  <form>
+    <div class="mb-3">
+      <input type="text" class="form-control" id="tags">
+        <script>
+          $(function () {
+              var availableTags = [
+                  {% for requester in requesters %}
+              "{{ requester }}",
+              {% endfor %}
+      ];
+          $("#tags").autocomplete({
+              source: availableTags
+          });
+    } );
+      </script>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
 </div>
 {% endblock %}
