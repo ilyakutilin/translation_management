@@ -31,6 +31,18 @@ class Requester(models.Model):
         "Email",
         help_text="Email of the translation requester",
     )
+    added_on = models.DateTimeField(
+        "Added on",
+        auto_now_add=True,
+    )
+    last_modified = models.DateTimeField(
+        "Last Modified",
+        auto_now=True,
+    )
+    is_active = models.BooleanField(
+        "Active",
+        default=True,
+    )
 
     class Meta:
         constraints = [
@@ -39,11 +51,14 @@ class Requester(models.Model):
                 fields=["first_name", "middle_name", "last_name", "email"],
             )
         ]
+        ordering = ("first_name", "last_name")
         verbose_name = "Requester"
         verbose_name_plural = "Requesters"
 
     def __str__(self):
-        return f"{self.first_name} {self.middle_name} {self.last_name}"
+        if self.middle_name and self.middle_name != "":
+            return f"{self.first_name} {self.middle_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name}"
 
 
 class Company(models.Model):
